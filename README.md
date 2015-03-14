@@ -5,7 +5,7 @@ A color picker activity optimized for Android Wear.  Handy for watch face settin
 
 The UI presents a wheel to select the base color (hue), and two half wheels for the saturation and light.
 
-The chosen color is shown on the center, with a check mark icon that the user can tap to confirm.
+The chosen color is shown in the center, with a check mark icon that the user can tap to confirm.
 
 The previous color (or black) is shown below the chosen color, with a cross icon to cancel.
 
