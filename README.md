@@ -9,6 +9,8 @@ The chosen color is shown on the center, with a check mark icon that the user ca
 
 The previous color (or black) is shown below the chosen color, with a cross icon to cancel.
 
+![Demo](https://github.com/BoD/android-wear-color-picker/raw/master/etc/demo_opt.gif "Demo")
+
 
 How to use
 ---
