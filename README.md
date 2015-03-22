@@ -28,7 +28,7 @@ repositories {
  (...)
 
 dependencies {
-    compile 'org.jraf:android-wear-color-picker:1.0.0'
+    compile 'org.jraf:android-wear-color-picker:1.0.1'
 }
 ```
 
