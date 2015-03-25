@@ -1,3 +1,5 @@
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20Wear%20Color%20Picker-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/1662)
+
 Android Wear Color Picker
 ===
 
