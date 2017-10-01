@@ -4,15 +4,15 @@ apply plugin: 'maven'
 group = 'org.jraf'
 ext.groupPath = group.replace('.', '/')
 ext.artifactId = 'android-wear-color-picker'
-version = '1.0.1'
+version = '1.0.2'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion '22.0.0'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.1'
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 22
+        targetSdkVersion 26
     }
 
     buildTypes {
@@ -25,7 +25,7 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.support:wearable:1.1.0'
+    compile 'com.google.android.support:wearable:2.0.5'
 }
 
 // Use "gradle uploadArchives" to deploy the aar to your local maven repository
@@ -43,11 +43,13 @@ android.libraryVariants.all { variant ->
     task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
         description "Generate Javadoc for $variant.name."
         source = variant.javaCompile.source
-        ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-        classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
-        options.links('http://docs.oracle.com/javase/7/docs/api/');
-        options.linksOffline('https://developer.android.com/reference/', "${android.sdkDirectory}/docs/reference");
-        options.tags(['attr', 'X'])
+        classpath = files(variant.javaCompile.classpath.files, project.android.getBootClasspath())
+        options {
+            links 'http://docs.oracle.com/javase/7/docs/api/'
+            linksOffline 'https://developer.android.com/reference/', "${android.sdkDirectory}/docs/reference"
+            tags(['attr', 'X'])
+            encoding = "UTF-8"
+        }
         exclude '**/BuildConfig.java'
         exclude '**/R.java'
     }
@@ -74,20 +76,22 @@ android.libraryVariants.all { variant ->
 task install(
         group: 'install',
         description: 'Make the library, generate a source jar, generate a javadoc jar, and copy everything to the local maven repository',
-        dependsOn: ['assembleRelease', 'uploadArchives', 'jarReleaseSources', 'jarReleaseJavadoc']) << {
-    // Copy the sources jar
-    println("Copying " + buildDir.getPath() + "/libs/library-${version}-sources.jar" + " to " + "${repositories.mavenLocal().getUrl()}/${groupPath}/${artifactId}/${version}" + "/${artifactId}-${version}-sources.jar")
-    copy {
-        from buildDir.getPath() + "/libs/library-${version}-sources.jar"
-        into "${repositories.mavenLocal().getUrl()}/${groupPath}/${artifactId}/${version}"
-        rename "library-${version}-sources.jar", "${artifactId}-${version}-sources.jar"
-    }
+        dependsOn: ['assembleRelease', 'uploadArchives', 'jarReleaseSources', 'jarReleaseJavadoc']) {
+    doLast {
+        // Copy the sources jar
+        println("Copying " + buildDir.getPath() + "/libs/library-${version}-sources.jar" + " to " + "${repositories.mavenLocal().getUrl()}/${groupPath}/${artifactId}/${version}" + "/${artifactId}-${version}-sources.jar")
+        copy {
+            from buildDir.getPath() + "/libs/library-${version}-sources.jar"
+            into "${repositories.mavenLocal().getUrl()}/${groupPath}/${artifactId}/${version}"
+            rename "library-${version}-sources.jar", "${artifactId}-${version}-sources.jar"
+        }
 
-    // Copy the javadoc jar
-    copy {
-        println("Copying " + buildDir.getPath() + "/libs/library-${version}-javadoc.jar" + " to " + "${repositories.mavenLocal().getUrl()}/${groupPath}/${artifactId}/${version}" + "/${artifactId}-${version}-javadoc.jar")
-        from buildDir.getPath() + "/libs/library-${version}-javadoc.jar"
-        into "${repositories.mavenLocal().getUrl()}/${groupPath}/${artifactId}/${version}"
-        rename "library-${version}-javadoc.jar", "${artifactId}-${version}-javadoc.jar"
+        // Copy the javadoc jar
+        copy {
+            println("Copying " + buildDir.getPath() + "/libs/library-${version}-javadoc.jar" + " to " + "${repositories.mavenLocal().getUrl()}/${groupPath}/${artifactId}/${version}" + "/${artifactId}-${version}-javadoc.jar")
+            from buildDir.getPath() + "/libs/library-${version}-javadoc.jar"
+            into "${repositories.mavenLocal().getUrl()}/${groupPath}/${artifactId}/${version}"
+            rename "library-${version}-javadoc.jar", "${artifactId}-${version}-javadoc.jar"
+        }
     }
 }
