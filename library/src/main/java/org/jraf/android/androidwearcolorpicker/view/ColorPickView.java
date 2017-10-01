@@ -503,7 +503,7 @@ public class ColorPickView extends View {
 
         float l = (2 - inHsv[1]) * inHsv[2];
         float s = inHsv[1] * inHsv[2];
-        if (l == 0) {
+        if (l == 0 || l == 2) {
             s = 0;
         } else if (l <= 1) {
             s /= l;
