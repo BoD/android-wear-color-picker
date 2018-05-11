@@ -41,6 +41,7 @@ import android.support.wear.widget.WearableLinearLayoutManager
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewTreeObserver
+import org.jraf.android.androidwearcolorpicker.R
 import org.jraf.android.androidwearcolorpicker.databinding.AwcpColorPickBinding
 
 class ColorPickActivity : Activity() {

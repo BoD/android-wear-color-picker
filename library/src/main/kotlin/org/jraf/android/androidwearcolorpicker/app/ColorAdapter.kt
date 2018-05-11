@@ -31,6 +31,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import org.jraf.android.androidwearcolorpicker.R
+import org.jraf.android.androidwearcolorpicker.databinding.AwcpColorPickItemBinding
 
 class ColorAdapter(
     context: Context,
