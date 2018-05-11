@@ -5,11 +5,7 @@ Android Wear Color Picker
 
 A color picker activity optimized for Android Wear.  Handy for watch face settings.
 
-The UI presents a wheel to select the base color (hue), and two half wheels for the saturation and light.
-
-The chosen color is shown in the center, with a check mark icon that the user can tap to confirm.
-
-The previous color (or black) is shown below the chosen color, with a cross icon to cancel.
+The UI presents a wheel of colors with different hues and lightness.
 
 ![Demo](https://github.com/BoD/android-wear-color-picker/raw/master/etc/demo_opt.gif "Demo")
 
@@ -30,7 +26,7 @@ repositories {
  (...)
 
 dependencies {
-    compile 'org.jraf:android-wear-color-picker:1.0.1'
+    compile 'org.jraf:android-wear-color-picker:2.0.0'
 }
 ```
 
@@ -67,17 +63,11 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 That's it!
 
 
-Credits
----
-
-The code is **strongly** based on the [HoloColorPicker](https://github.com/LarsWerkman/HoloColorPicker) library by Lars Werkman.
-
-
 License
 ---
 
 ```
-Copyright (C) 2015 Benoit 'BoD' Lubek (BoD@JRAF.org)
+Copyright (C) 2015-2018 Benoit 'BoD' Lubek (BoD@JRAF.org)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

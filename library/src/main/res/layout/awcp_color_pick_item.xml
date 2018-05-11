@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
   This source is part of the
        _____  ___   ____
@@ -8,7 +7,7 @@
                                /___/
   repository.
 
-  Copyright (C) 2015 Benoit 'BoD' Lubek (BoD@JRAF.org)
+  Copyright (C) 2015-2018 Benoit 'BoD' Lubek (BoD@JRAF.org)
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -22,8 +21,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<resources>
-    <dimen name="awcp_stroke_width">28dp</dimen>
-    <dimen name="awcp_spacer">1px</dimen>
-    <dimen name="awcp_indicator_stroke_width">2dp</dimen>
-</resources>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/ctnColors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="8dp" />
+
+</layout>
