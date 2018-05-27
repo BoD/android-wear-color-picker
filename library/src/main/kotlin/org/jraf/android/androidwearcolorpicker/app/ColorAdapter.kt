@@ -40,9 +40,10 @@ class ColorAdapter(
 ) :
     RecyclerView.Adapter<ColorAdapter.ViewHolder>() {
     companion object {
-        const val HUE_COUNT = 12
+        const val HUE_COUNT = 32
         const val SATURATION_COUNT = 3
-        const val VALUE_COUNT = 3
+        const val VALUE_COUNT = 4
+        const val VALUE_MIN = .15F
 
         const val MID_POSITION =
             Int.MAX_VALUE / 2 - ((Int.MAX_VALUE / 2) % (HUE_COUNT * SATURATION_COUNT + 1))
@@ -74,10 +75,14 @@ class ColorAdapter(
         val saturation =
             if (position == 0) 0F else (((position - 1) % SATURATION_COUNT) + 1) / (SATURATION_COUNT.toFloat())
         for (i in 0 until VALUE_COUNT) {
-            var value =
-                if (position == 0) i / (VALUE_COUNT - 1).toFloat() else (i + 1) / VALUE_COUNT.toFloat()
-            // Make the first values darker
-            value = Math.pow(value.toDouble(), 1.5).toFloat()
+            val value =
+                if (position == 0) {
+                    // Special case for white: no minimum
+                    i / (VALUE_COUNT - 1).toFloat()
+                } else {
+                    // Other colors
+                    VALUE_MIN + (i.toFloat() / (VALUE_COUNT - 1)) * (1F - VALUE_MIN)
+                }
 
             val imgColor = holder.binding.ctnColors.getChildAt(i) as ImageView
             val color = Color.HSVToColor(floatArrayOf(hue, saturation, value))

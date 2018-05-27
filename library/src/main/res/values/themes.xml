@@ -24,6 +24,8 @@
   -->
 <resources>
 
-    <style name="Theme.AndroidWearColorPicker" parent="@android:style/Theme.DeviceDefault" />
+    <style name="Theme.AndroidWearColorPicker" parent="@android:style/Theme.DeviceDefault">
+        <item name="android:colorBackground">@android:color/black</item>
+    </style>
 
 </resources>
