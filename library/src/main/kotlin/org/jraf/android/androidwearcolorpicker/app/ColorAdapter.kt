@@ -42,7 +42,7 @@ class ColorAdapter(
 ) :
     RecyclerView.Adapter<ColorAdapter.ViewHolder>() {
     companion object {
-        const val HUE_COUNT = 32
+        const val HUE_COUNT = 36
         const val SATURATION_COUNT = 3
         const val VALUE_COUNT = 4
         const val VALUE_MIN = .15F
