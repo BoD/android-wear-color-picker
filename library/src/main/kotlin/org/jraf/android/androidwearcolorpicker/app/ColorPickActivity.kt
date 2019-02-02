@@ -44,7 +44,6 @@ import android.view.ViewAnimationUtils
 import android.view.ViewTreeObserver
 import org.jraf.android.androidwearcolorpicker.R
 import org.jraf.android.androidwearcolorpicker.databinding.AwcpColorPickBinding
-import java.util.Arrays
 
 class ColorPickActivity : Activity() {
     companion object {

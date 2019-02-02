@@ -23,3 +23,7 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+project.tasks.findByName('wrapper')?.configure {
+    gradleVersion = '5.1.1'
+    distributionType = Wrapper.DistributionType.ALL
+}
