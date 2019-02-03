@@ -30,6 +30,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
@@ -122,12 +123,16 @@ class ColorPickActivity : Activity() {
             anim.start()
         }
 
+        val initialPosition = ColorAdapter.MID_POSITION +
+                if (intent?.hasExtra(EXTRA_OLD_COLOR) != true) 0
+                else ColorAdapter.colorToPositions(intent!!.getIntExtra(EXTRA_OLD_COLOR, Color.WHITE)).first
+
         // For some unknown reason, this must be posted - if done right away, it doesn't work
         binding.rclList.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 Handler(Looper.getMainLooper()).post {
-                    binding.rclList.scrollToPosition(ColorAdapter.MID_POSITION)
+                    binding.rclList.scrollToPosition(initialPosition)
                 }
                 binding.rclList.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
