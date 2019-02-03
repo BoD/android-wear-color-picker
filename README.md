@@ -26,7 +26,7 @@ repositories {
  (...)
 
 dependencies {
-    compile 'org.jraf:android-wear-color-picker:2.0.0'
+    compile 'org.jraf:android-wear-color-picker:2.1.0'
 }
 ```
 
@@ -67,7 +67,7 @@ License
 ---
 
 ```
-Copyright (C) 2015-2018 Benoit 'BoD' Lubek (BoD@JRAF.org)
+Copyright (C) 2015-2019 Benoit 'BoD' Lubek (BoD@JRAF.org)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
