@@ -7,7 +7,7 @@
  *                              /___/
  * repository.
  *
- * Copyright (C) 2015-2018 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ * Copyright (C) 2015-2019 Benoit 'BoD' Lubek (BoD@JRAF.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.jraf.android.androidwearcolorpicker.app
 
 import android.animation.Animator
@@ -56,6 +55,7 @@ class ColorPickActivity : Activity() {
          * @param data The intent passed to onActivityResult.
          * @return The resulting picked color, or 0 if the result could not be found in the given Intent.
          */
+        @Suppress("unused")
         fun getPickedColor(data: Intent) = data.getIntExtra(EXTRA_RESULT, 0)
     }
 
@@ -139,6 +139,7 @@ class ColorPickActivity : Activity() {
         })
     }
 
+    @Suppress("unused")
     class IntentBuilder {
         private var oldColor: Int = 0
 
@@ -160,7 +161,7 @@ class ColorPickActivity : Activity() {
          * @param context The context to use to build the Intent.
          * @return The build Intent.
          */
-        fun build(context: Context) = Intent(context, ColorPickActivity::class.java)
+        fun build(context: Context): Intent = Intent(context, ColorPickActivity::class.java)
             .putExtra(EXTRA_OLD_COLOR, oldColor)
     }
 }

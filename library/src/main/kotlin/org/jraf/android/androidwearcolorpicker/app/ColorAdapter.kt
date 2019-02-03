@@ -7,7 +7,7 @@
  *                              /___/
  * repository.
  *
- * Copyright (C) 2015-2018 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ * Copyright (C) 2015-2019 Benoit 'BoD' Lubek (BoD@JRAF.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ class ColorAdapter(
         const val HUE_COUNT = 36
         const val SATURATION_COUNT = 3
         const val VALUE_COUNT = 4
-        const val VALUE_MIN = .15F
+        private const val VALUE_MIN = .15F
 
         const val MID_POSITION =
             Int.MAX_VALUE / 2 - ((Int.MAX_VALUE / 2) % (HUE_COUNT * SATURATION_COUNT + 1))
@@ -58,9 +58,9 @@ class ColorAdapter(
          * @property position adapter position of the color row, mod ([HUE_COUNT] * [SATURATION_COUNT] + 1)
          * @return a [FloatArray] with two elements: the hue and saturation values
          */
-        fun positionToHS(position: Int) = if (position == 0) floatArrayOf(0f, 0f) else floatArrayOf(
-                (((position - 1) / SATURATION_COUNT) / HUE_COUNT.toFloat()) * 360f,
-                (((position - 1) % SATURATION_COUNT) + 1) / (SATURATION_COUNT.toFloat())
+        private fun positionToHS(position: Int) = if (position == 0) floatArrayOf(0f, 0f) else floatArrayOf(
+            (((position - 1) / SATURATION_COUNT) / HUE_COUNT.toFloat()) * 360f,
+            (((position - 1) % SATURATION_COUNT) + 1) / (SATURATION_COUNT.toFloat())
         )
 
         /**
@@ -70,13 +70,15 @@ class ColorAdapter(
          * @return function that, given the value row index, generates the corresponding [Int] color
          */
         fun positionToSubPositionToColor(position: Int) = { subPosition: Int ->
-            Color.HSVToColor(floatArrayOf(
+            Color.HSVToColor(
+                floatArrayOf(
                     *positionToHS(position),
                     // Special case for white: no minimum
                     if (position == 0) subPosition / (VALUE_COUNT - 1).toFloat()
                     // Other colors
                     else VALUE_MIN + (subPosition.toFloat() / (VALUE_COUNT - 1)) * (1F - VALUE_MIN)
-            ))
+                )
+            )
         }
 
         /**
@@ -89,10 +91,10 @@ class ColorAdapter(
          * @return a positive integer such that, when [positionToHS] is applied to it, the result is
          *         close to the input values
          */
-        fun hsToPosition(hs: FloatArray) =
-                if (ceil(hs[1] * SATURATION_COUNT).toInt() == 0) 0
-                else ceil(hs[0] / 360f * HUE_COUNT).toInt() * SATURATION_COUNT +
-                        ceil(hs[1] * SATURATION_COUNT).toInt() // - 1 + 1
+        private fun hsToPosition(hs: FloatArray) =
+            if (ceil(hs[1] * SATURATION_COUNT).toInt() == 0) 0
+            else ceil(hs[0] / 360f * HUE_COUNT).toInt() * SATURATION_COUNT +
+                    ceil(hs[1] * SATURATION_COUNT).toInt() // - 1 + 1
 
         /**
          * Computes a hue-saturation pair's most fitting adapter position.
@@ -104,14 +106,14 @@ class ColorAdapter(
          * @return a positive integer such that, when [positionToHS] is applied to it, the result is the closest
          * possible to the input values
          */
-        fun hsToNearestPosition(hs: FloatArray): Int {
+        private fun hsToNearestPosition(hs: FloatArray): Int {
             val position = hsToPosition(hs)
             if (position == 0) {
                 return position
             }
             var nearest = position
             var minDistanceSquared: Double = Double.POSITIVE_INFINITY
-            for (i in -2*SATURATION_COUNT..2*SATURATION_COUNT) {
+            for (i in -2 * SATURATION_COUNT..2 * SATURATION_COUNT) {
                 val correctedPosition = when {
                     position + i <= 0 -> position + HUE_COUNT * SATURATION_COUNT + i
                     position + i > HUE_COUNT * SATURATION_COUNT -> position + i - HUE_COUNT * SATURATION_COUNT
@@ -142,9 +144,9 @@ class ColorAdapter(
             Color.colorToHSV(color, hsv)
             val position = hsToNearestPosition(hsv)
             return Pair(
-                    position,
-                    if (position == 0) ceil(hsv[2] * (VALUE_COUNT - 1).toFloat()).toInt()
-                    else ceil((hsv[2] - VALUE_MIN) / (1F - VALUE_MIN) * (VALUE_COUNT - 1)).toInt()
+                position,
+                if (position == 0) ceil(hsv[2] * (VALUE_COUNT - 1).toFloat()).toInt()
+                else ceil((hsv[2] - VALUE_MIN) / (1F - VALUE_MIN) * (VALUE_COUNT - 1)).toInt()
             )
         }
     }
