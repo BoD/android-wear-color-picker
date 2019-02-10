@@ -32,6 +32,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import org.jraf.android.androidwearcolorpicker.R
+import org.jraf.android.androidwearcolorpicker.app.ColorAdapter.Companion.HUE_COUNT
+import org.jraf.android.androidwearcolorpicker.app.ColorAdapter.Companion.SATURATION_COUNT
 import org.jraf.android.androidwearcolorpicker.databinding.AwcpColorPickItemBinding
 import kotlin.math.ceil
 import kotlin.math.cos
@@ -55,7 +57,7 @@ class ColorAdapter(
          *
          * If you want to use this as a full HSV triple, use [floatArrayOf] and the spread operator.
          *
-         * @property position adapter position of the color row, mod ([HUE_COUNT] * [SATURATION_COUNT] + 1)
+         * @param position adapter position of the color row, mod ([HUE_COUNT] * [SATURATION_COUNT] + 1)
          * @return a [FloatArray] with two elements: the hue and saturation values
          */
         private fun positionToHS(position: Int) = if (position == 0) floatArrayOf(0f, 0f) else floatArrayOf(
@@ -66,20 +68,18 @@ class ColorAdapter(
         /**
          * Turns a wrapped adapter position and a row index into a [Color].
          *
-         * @property position adapter position of the color row, mod ([HUE_COUNT] * [SATURATION_COUNT] + 1)
-         * @return function that, given the value row index, generates the corresponding [Int] color
+         * @param position adapter position of the color row, mod ([HUE_COUNT] * [SATURATION_COUNT] + 1)
+         * @return the corresponding [Int] color
          */
-        fun positionToSubPositionToColor(position: Int) = { subPosition: Int ->
-            Color.HSVToColor(
-                floatArrayOf(
-                    *positionToHS(position),
-                    // Special case for white: no minimum
-                    if (position == 0) subPosition / (VALUE_COUNT - 1).toFloat()
-                    // Other colors
-                    else VALUE_MIN + (subPosition.toFloat() / (VALUE_COUNT - 1)) * (1F - VALUE_MIN)
-                )
+        fun positionAndSubPositionToColor(position: Int, subPosition: Int) = Color.HSVToColor(
+            floatArrayOf(
+                *positionToHS(position),
+                // Special case for white: no minimum
+                if (position == 0) subPosition / (VALUE_COUNT - 1).toFloat()
+                // Other colors
+                else VALUE_MIN + (subPosition.toFloat() / (VALUE_COUNT - 1)) * (1F - VALUE_MIN)
             )
-        }
+        )
 
         /**
          * Approximates a hue-saturation pair's adapter position.
@@ -87,7 +87,7 @@ class ColorAdapter(
          * Due to numerical errors, [positionToHS] is not trivially reversible; this function should
          * therefore not be used as is in an attempt to revert the conversion.
          *
-         * @property hs the [Color.colorToHSV] components of a color, although only hue and saturation are needed
+         * @param hs the [Color.colorToHSV] components of a color, although only hue and saturation are needed
          * @return a positive integer such that, when [positionToHS] is applied to it, the result is
          *         close to the input values
          */
@@ -143,10 +143,11 @@ class ColorAdapter(
             val hsv = floatArrayOf(0f, 0f, 0f)
             Color.colorToHSV(color, hsv)
             val position = hsToNearestPosition(hsv)
+            val value = hsv[2]
             return Pair(
                 position,
-                if (position == 0) ceil(hsv[2] * (VALUE_COUNT - 1).toFloat()).toInt()
-                else ceil((hsv[2] - VALUE_MIN) / (1F - VALUE_MIN) * (VALUE_COUNT - 1)).toInt()
+                if (position == 0) ceil(value * (VALUE_COUNT - 1).toFloat()).toInt()
+                else ((value - VALUE_MIN) / (1F - VALUE_MIN) * (VALUE_COUNT - 1)).toInt()
             )
         }
     }
@@ -172,10 +173,9 @@ class ColorAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, realPosition: Int) {
         val position = realPosition % (HUE_COUNT * SATURATION_COUNT + 1)
-        val subPositionToColor = positionToSubPositionToColor(position)
         for (i in 0 until VALUE_COUNT) {
             val imgColor = holder.binding.ctnColors.getChildAt(i) as ImageView
-            val color = subPositionToColor(i)
+            val color = positionAndSubPositionToColor(position, i)
             (imgColor.drawable as GradientDrawable).setColor(color)
             imgColor.setOnClickListener { colorPickCallbacks(color, imgColor) }
         }

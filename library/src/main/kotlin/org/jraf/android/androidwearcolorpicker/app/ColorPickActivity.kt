@@ -34,12 +34,14 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.support.annotation.ColorInt
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.support.wear.widget.CurvingLayoutCallback
 import android.support.wear.widget.WearableLinearLayoutManager
 import android.view.View
 import android.view.ViewAnimationUtils
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import org.jraf.android.androidwearcolorpicker.R
 import org.jraf.android.androidwearcolorpicker.databinding.AwcpColorPickBinding
@@ -70,18 +72,17 @@ class ColorPickActivity : Activity() {
         // Apply an offset + scale on the items depending on their distance from the center (only for Round screens)
         if (resources.configuration.isScreenRound) {
             binding.rclList.layoutManager =
-                    WearableLinearLayoutManager(this, object : CurvingLayoutCallback(this) {
+                WearableLinearLayoutManager(this, object : CurvingLayoutCallback(this) {
+                    override fun onLayoutFinished(child: View, parent: RecyclerView) {
+                        super.onLayoutFinished(child, parent)
 
-                        override fun onLayoutFinished(child: View, parent: RecyclerView) {
-                            super.onLayoutFinished(child, parent)
+                        val childTop = child.y + child.height / 2f
+                        val childOffsetFromCenter = childTop - parent.height / 2f
 
-                            val childTop = child.y + child.height / 2f
-                            val childOffsetFromCenter = childTop - parent.height / 2f
-
-                            child.pivotX = 1f
-                            child.rotation = -15f * (childOffsetFromCenter / parent.height)
-                        }
-                    })
+                        child.pivotX = 1f
+                        child.rotation = -15f * (childOffsetFromCenter / parent.height)
+                    }
+                })
 
             // Also snaps
             LinearSnapHelper().attachToRecyclerView(binding.rclList)
@@ -91,13 +92,12 @@ class ColorPickActivity : Activity() {
         }
 
         binding.rclList.adapter = ColorAdapter(this) { colorArgb, clickedView ->
+            setResult(RESULT_OK, Intent().putExtra(EXTRA_RESULT, colorArgb))
+
             binding.vieRevealedColor.setBackgroundColor(colorArgb)
 
-            val rect = Rect()
-            clickedView.getGlobalVisibleRect(rect)
-
-            val centerX = rect.left + clickedView.width / 2
-            val centerY = rect.top + clickedView.height / 2
+            val clickedViewRect = Rect()
+            clickedView.getGlobalVisibleRect(clickedViewRect)
 
             val finalRadius = Math.hypot(
                 binding.vieRevealedColor.width.toDouble(),
@@ -106,15 +106,14 @@ class ColorPickActivity : Activity() {
 
             val anim = ViewAnimationUtils.createCircularReveal(
                 binding.vieRevealedColor,
-                centerX,
-                centerY,
-                clickedView.width / 2F,
+                clickedViewRect.centerX(),
+                clickedViewRect.centerY(),
+                clickedViewRect.width() / 2F - 4,
                 finalRadius
             )
 
             anim.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    setResult(RESULT_OK, Intent().putExtra(EXTRA_RESULT, colorArgb))
+                override fun onAnimationEnd(animation: Animator) {
                     finish()
                 }
             })
@@ -127,30 +126,59 @@ class ColorPickActivity : Activity() {
                 if (intent?.hasExtra(EXTRA_OLD_COLOR) != true) 0
                 else ColorAdapter.colorToPositions(intent!!.getIntExtra(EXTRA_OLD_COLOR, Color.WHITE)).first
 
-        // For some unknown reason, this must be posted - if done right away, it doesn't work
         binding.rclList.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
+                val oldColor = intent!!.getIntExtra(EXTRA_OLD_COLOR, Color.WHITE)
+                binding.vieRevealedColor.setBackgroundColor(oldColor)
+                binding.vieRevealedColor.visibility = View.VISIBLE
+
+                val selectedViewIdx = ColorAdapter.colorToPositions(oldColor).second
+                val selectedView = (binding.rclList.layoutManager!!.findViewByPosition(0) as ViewGroup).getChildAt(selectedViewIdx)
+                val selectedViewRect = Rect()
+                selectedView.getGlobalVisibleRect(selectedViewRect)
+
+                ViewAnimationUtils.createCircularReveal(
+                    binding.vieRevealedColor,
+                    selectedViewRect.centerX(),
+                    selectedViewRect.centerY(),
+                    Math.hypot(
+                        binding.vieRevealedColor.width.toDouble(),
+                        binding.vieRevealedColor.height.toDouble()
+                    ).toFloat(),
+                    selectedViewRect.width() / 2F - 4
+                ).apply {
+                    startDelay = 300
+                    duration = 500
+                    addListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator) {
+                            binding.vieRevealedColor.visibility = View.INVISIBLE
+                        }
+                    })
+                }
+                    .start()
+
+                // For some unknown reason, this must be posted - if done right away, it doesn't work
                 Handler(Looper.getMainLooper()).post {
                     binding.rclList.scrollToPosition(initialPosition)
+                    binding.rclList.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 }
-                binding.rclList.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
     }
 
     @Suppress("unused")
     class IntentBuilder {
-        private var oldColor: Int = 0
+        private var oldColor: Int = Color.WHITE
 
         /**
          * Sets the initial value for the picked color.
-         * The default value is black.
+         * The default value is white.
          *
          * @param oldColor The old color to use as an ARGB int (the alpha component is ignored).
          * @return This builder.
          */
-        fun oldColor(oldColor: Int): IntentBuilder {
+        fun oldColor(@ColorInt oldColor: Int): IntentBuilder {
             this.oldColor = oldColor
             return this
         }

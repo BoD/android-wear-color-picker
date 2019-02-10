@@ -1,0 +1,34 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        applicationId 'org.jraf.android.androidwearcolorpicker.sample'
+        minSdkVersion 23
+        targetSdkVersion 28
+        versionCode 1
+        versionName '1.0.0'
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.android.support:wearable:2.4.0'
+    implementation 'com.google.android.gms:play-services-wearable:16.0.1'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:wear:28.0.0'
+    compileOnly 'com.google.android.wearable:wearable:2.4.0'
+
+    implementation project(':library')
+}

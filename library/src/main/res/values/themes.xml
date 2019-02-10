@@ -8,7 +8,7 @@
                                /___/
   repository.
 
-  Copyright (C) 2015-2018 Benoit 'BoD' Lubek (BoD@JRAF.org)
+  Copyright (C) 2015-2019 Benoit 'BoD' Lubek (BoD@JRAF.org)
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -26,6 +26,12 @@
 
     <style name="Theme.AndroidWearColorPicker" parent="@android:style/Theme.DeviceDefault">
         <item name="android:colorBackground">@android:color/black</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Activity.AndroidWearColorPicker</item>
+    </style>
+
+    <style name="Animation.Activity.AndroidWearColorPicker" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>
     </style>
 
 </resources>
