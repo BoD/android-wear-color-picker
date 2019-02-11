@@ -44,7 +44,8 @@ class MainActivity : WearableActivity() {
         // Enables Always-on
         setAmbientEnabled()
 
-        findViewById<Button>(R.id.btnPickColor).setOnClickListener {
+        // "Rainbow" mode
+        findViewById<Button>(R.id.btnPickColorRainbow).setOnClickListener {
             startActivityForResult(
                 ColorPickActivity.IntentBuilder()
                     .oldColor(pickedColor)
@@ -52,6 +53,33 @@ class MainActivity : WearableActivity() {
                 REQUEST_PICK_COLOR
             )
         }
+
+        // Specific colors mode
+        findViewById<Button>(R.id.btnPickColorSpecific).setOnClickListener {
+            startActivityForResult(
+                ColorPickActivity.IntentBuilder()
+                    .oldColor(pickedColor)
+                    .colors(
+                        listOf(
+                            Color.BLACK,
+                            Color.DKGRAY,
+                            Color.GRAY,
+                            Color.LTGRAY,
+                            Color.WHITE,
+                            Color.RED,
+                            Color.GREEN,
+                            Color.BLUE,
+                            Color.YELLOW,
+                            Color.CYAN,
+                            Color.MAGENTA,
+                            0xFFBB00DD.toInt()
+                        )
+                    )
+                    .build(this),
+                REQUEST_PICK_COLOR
+            )
+        }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

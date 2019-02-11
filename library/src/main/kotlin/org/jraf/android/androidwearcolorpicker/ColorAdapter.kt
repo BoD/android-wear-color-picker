@@ -39,6 +39,7 @@ import kotlin.math.cos
 
 class ColorAdapter(
     context: Context,
+    private val colors: IntArray?,
     private val colorPickCallbacks: (Int, ImageView) -> Unit
 ) :
     RecyclerView.Adapter<ColorAdapter.ViewHolder>() {
@@ -155,6 +156,12 @@ class ColorAdapter(
 
     class ViewHolder(val binding: AwcpColorPickItemBinding) : RecyclerView.ViewHolder(binding.root)
 
+    init {
+        if (colors != null && (colors.size < VALUE_COUNT || colors.size % VALUE_COUNT != 0)) {
+            throw IllegalArgumentException("colors.size must be at least, and a multiple of $VALUE_COUNT")
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate<AwcpColorPickItemBinding>(
             layoutInflater,
@@ -171,12 +178,24 @@ class ColorAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, realPosition: Int) {
-        val position = realPosition % (HUE_COUNT * SATURATION_COUNT + 1)
-        for (i in 0 until VALUE_COUNT) {
-            val imgColor = holder.binding.ctnColors.getChildAt(i) as ImageView
-            val color = positionAndSubPositionToColor(position, i)
-            (imgColor.drawable as GradientDrawable).setColor(color)
-            imgColor.setOnClickListener { colorPickCallbacks(color, imgColor) }
+        if (colors != null) {
+            // Specific colors mode
+            val position = (realPosition % (colors.size / VALUE_COUNT)) * VALUE_COUNT
+            for (i in 0 until VALUE_COUNT) {
+                val imgColor = holder.binding.ctnColors.getChildAt(i) as ImageView
+                val color = colors[position + i]
+                (imgColor.drawable as GradientDrawable).setColor(color)
+                imgColor.setOnClickListener { colorPickCallbacks(color, imgColor) }
+            }
+        } else {
+            // "Rainbow" mode
+            val position = realPosition % (HUE_COUNT * SATURATION_COUNT + 1)
+            for (i in 0 until VALUE_COUNT) {
+                val imgColor = holder.binding.ctnColors.getChildAt(i) as ImageView
+                val color = positionAndSubPositionToColor(position, i)
+                (imgColor.drawable as GradientDrawable).setColor(color)
+                imgColor.setOnClickListener { colorPickCallbacks(color, imgColor) }
+            }
         }
     }
 

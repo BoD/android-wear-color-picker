@@ -49,6 +49,7 @@ class ColorPickActivity : Activity() {
     companion object {
         const val EXTRA_RESULT = "EXTRA_RESULT"
         const val EXTRA_OLD_COLOR = "EXTRA_OLD_COLOR"
+        const val EXTRA_COLORS = "EXTRA_COLORS"
 
         /**
          * Extracts the picked color from an onActivityResult data Intent.
@@ -90,7 +91,7 @@ class ColorPickActivity : Activity() {
             binding.rclList.layoutManager = WearableLinearLayoutManager(this)
         }
 
-        binding.rclList.adapter = ColorAdapter(this) { colorArgb, clickedView ->
+        binding.rclList.adapter = ColorAdapter(this, intent.getIntArrayExtra(EXTRA_COLORS)) { colorArgb, clickedView ->
             setResult(RESULT_OK, Intent().putExtra(EXTRA_RESULT, colorArgb))
 
             binding.vieRevealedColor.setBackgroundColor(colorArgb)
@@ -174,6 +175,7 @@ class ColorPickActivity : Activity() {
     @Suppress("unused")
     class IntentBuilder {
         private var oldColor: Int = Color.WHITE
+        private var colors: List<Int>? = null
 
         /**
          * Sets the initial value for the picked color.
@@ -188,6 +190,18 @@ class ColorPickActivity : Activity() {
         }
 
         /**
+         * Sets the colors to display in the picker.
+         * This is optional - if not specified, all the colors of the rainbow will be used.
+         *
+         * @param colors The colors to display as ARGB ints (the alpha component is ignored).
+         * @return This builder.
+         */
+        fun colors(colors: List<Int>): IntentBuilder {
+            this.colors = colors
+            return this
+        }
+
+        /**
          * Build the resulting Intent.
          *
          * @param context The context to use to build the Intent.
@@ -195,5 +209,6 @@ class ColorPickActivity : Activity() {
          */
         fun build(context: Context): Intent = Intent(context, ColorPickActivity::class.java)
             .putExtra(EXTRA_OLD_COLOR, oldColor)
+            .putExtra(EXTRA_COLORS, colors?.toIntArray())
     }
 }

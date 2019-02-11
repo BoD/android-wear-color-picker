@@ -17,16 +17,29 @@
         app:layout_box="all">
 
         <Button
-            android:id="@+id/btnPickColor"
+            android:id="@+id/btnPickColorRainbow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:gravity="center"
-            android:text="@string/pick_color"
-            app:layout_constraintBottom_toTopOf="@+id/pickedColor"
+            android:text="@string/pick_color_rainbow"
+            app:layout_constraintBottom_toTopOf="@+id/btnPickColorSpecific"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <Button
+            android:id="@+id/btnPickColorSpecific"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:gravity="center"
+            android:text="@string/pick_color_specific"
+            app:layout_constraintBottom_toTopOf="@+id/pickedColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnPickColorRainbow"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <View
@@ -38,7 +51,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnPickColor" />
+            app:layout_constraintTop_toBottomOf="@+id/btnPickColorSpecific" />
+
 
     </android.support.constraint.ConstraintLayout>
 </android.support.wear.widget.BoxInsetLayout>

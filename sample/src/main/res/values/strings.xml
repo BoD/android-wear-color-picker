@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Sampleapp</string>
-    <string name="pick_color">Pick a color</string>
+    <string name="pick_color_rainbow">Pick a color (rainbow)</string>
+    <string name="pick_color_specific">Pick a color (specific)</string>
 </resources>
