@@ -21,7 +21,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jraf.android.androidwearcolorpicker.app
+package org.jraf.android.androidwearcolorpicker
 
 import android.content.Context
 import android.databinding.DataBindingUtil
@@ -31,9 +31,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import org.jraf.android.androidwearcolorpicker.R
-import org.jraf.android.androidwearcolorpicker.app.ColorAdapter.Companion.HUE_COUNT
-import org.jraf.android.androidwearcolorpicker.app.ColorAdapter.Companion.SATURATION_COUNT
+import org.jraf.android.androidwearcolorpicker.ColorAdapter.Companion.HUE_COUNT
+import org.jraf.android.androidwearcolorpicker.ColorAdapter.Companion.SATURATION_COUNT
 import org.jraf.android.androidwearcolorpicker.databinding.AwcpColorPickItemBinding
 import kotlin.math.ceil
 import kotlin.math.cos

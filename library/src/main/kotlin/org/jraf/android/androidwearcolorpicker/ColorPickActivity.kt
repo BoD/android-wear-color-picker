@@ -21,7 +21,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jraf.android.androidwearcolorpicker.app
+package org.jraf.android.androidwearcolorpicker
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -43,7 +43,6 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import org.jraf.android.androidwearcolorpicker.R
 import org.jraf.android.androidwearcolorpicker.databinding.AwcpColorPickBinding
 
 class ColorPickActivity : Activity() {
@@ -84,7 +83,7 @@ class ColorPickActivity : Activity() {
                     }
                 })
 
-            // Also snaps
+            // Also snap
             LinearSnapHelper().attachToRecyclerView(binding.rclList)
         } else {
             // Square screen: no scale effect and no snapping
@@ -124,7 +123,12 @@ class ColorPickActivity : Activity() {
 
         val initialPosition = ColorAdapter.MID_POSITION +
                 if (intent?.hasExtra(EXTRA_OLD_COLOR) != true) 0
-                else ColorAdapter.colorToPositions(intent!!.getIntExtra(EXTRA_OLD_COLOR, Color.WHITE)).first
+                else ColorAdapter.colorToPositions(
+                    intent!!.getIntExtra(
+                        EXTRA_OLD_COLOR,
+                        Color.WHITE
+                    )
+                ).first
 
         binding.rclList.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {

@@ -28,7 +28,7 @@
 
     <application>
         <activity
-            android:name=".app.ColorPickActivity"
+            android:name=".ColorPickActivity"
             android:theme="@style/Theme.AndroidWearColorPicker" />
     </application>
 

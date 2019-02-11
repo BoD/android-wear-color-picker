@@ -31,7 +31,7 @@ import android.os.Bundle
 import android.support.wearable.activity.WearableActivity
 import android.view.View
 import android.widget.Button
-import org.jraf.android.androidwearcolorpicker.app.ColorPickActivity
+import org.jraf.android.androidwearcolorpicker.ColorPickActivity
 
 class MainActivity : WearableActivity() {
 
