@@ -41,7 +41,7 @@ dependencies {
     implementation 'com.android.support:wear:28.0.0'
 }
 
-// Use "gradle uploadArchives" to deploy the aar to your local maven repository
+// Use "./gradlew uploadArchives" to deploy the aar to your local maven repository
 uploadArchives {
     repositories {
         mavenDeployer {
@@ -84,7 +84,7 @@ android.libraryVariants.all { variant ->
     }
 }
 
-// Use "gradle install" to deploy the aar to your local maven repository, as well as the javadoc and the source jars
+// Use "./gradlew install" to deploy the aar to your local maven repository, as well as the javadoc and the source jars
 // noinspection GroovyAssignabilityCheck
 task install(
         group: 'install',
