@@ -91,7 +91,7 @@ class ColorPickActivity : Activity() {
             binding.rclList.layoutManager = WearableLinearLayoutManager(this)
         }
 
-        binding.rclList.adapter = ColorAdapter(this, intent.getIntArrayExtra(EXTRA_COLORS)) { colorArgb, clickedView ->
+        val adapter = ColorAdapter(this, intent.getIntArrayExtra(EXTRA_COLORS)) { colorArgb, clickedView ->
             setResult(RESULT_OK, Intent().putExtra(EXTRA_RESULT, colorArgb))
 
             binding.vieRevealedColor.setBackgroundColor(colorArgb)
@@ -121,10 +121,11 @@ class ColorPickActivity : Activity() {
             binding.vieRevealedColor.visibility = View.VISIBLE
             anim.start()
         }
+        binding.rclList.adapter = adapter
 
         val initialPosition = ColorAdapter.MID_POSITION +
                 if (intent?.hasExtra(EXTRA_OLD_COLOR) != true) 0
-                else ColorAdapter.colorToPositions(
+                else adapter.colorToPositions(
                     intent!!.getIntExtra(
                         EXTRA_OLD_COLOR,
                         Color.WHITE
@@ -138,7 +139,7 @@ class ColorPickActivity : Activity() {
                 binding.vieRevealedColor.setBackgroundColor(oldColor)
                 binding.vieRevealedColor.visibility = View.VISIBLE
 
-                val selectedViewIdx = ColorAdapter.colorToPositions(oldColor).second
+                val selectedViewIdx = adapter.colorToPositions(oldColor).second
                 val selectedView = (binding.rclList.layoutManager!!.findViewByPosition(0) as ViewGroup).getChildAt(selectedViewIdx)
                 val selectedViewRect = Rect()
                 selectedView.getGlobalVisibleRect(selectedViewRect)

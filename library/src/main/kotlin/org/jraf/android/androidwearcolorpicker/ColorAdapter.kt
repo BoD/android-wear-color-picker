@@ -102,7 +102,7 @@ class ColorAdapter(
          * This actually compares positions surrounding the output of [hsToPosition] regarding their fitness to
          * represent the hue-saturation pair.
          *
-         * @property hs the [Color.colorToHSV] components of a color, although only hue and saturation are needed
+         * @param hs the [Color.colorToHSV] components of a color, although only hue and saturation are needed
          * @return a positive integer such that, when [positionToHS] is applied to it, the result is the closest
          * possible to the input values
          */
@@ -131,24 +131,6 @@ class ColorAdapter(
                 }
             }
             return nearest
-        }
-
-        /**
-         * Computes a [Color]'s closest neighbour within the color picker.
-         *
-         * @property color the color to search a neighbour for
-         * @return a pair consisting of an adapter position and an index within the value row
-         */
-        fun colorToPositions(color: Int): Pair<Int, Int> {
-            val hsv = floatArrayOf(0f, 0f, 0f)
-            Color.colorToHSV(color, hsv)
-            val position = hsToNearestPosition(hsv)
-            val value = hsv[2]
-            return Pair(
-                position,
-                if (position == 0) ceil(value * (VALUE_COUNT - 1).toFloat()).toInt()
-                else ((value - VALUE_MIN) / (1F - VALUE_MIN) * (VALUE_COUNT - 1)).toInt()
-            )
         }
     }
 
@@ -200,5 +182,31 @@ class ColorAdapter(
     }
 
     override fun getItemCount() = Int.MAX_VALUE
+
+    /**
+     * Computes a [Color]'s closest neighbour within the color picker.
+     *
+     * @param color the color to search a neighbour for
+     * @return a pair consisting of an adapter position and an index within the value row
+     */
+    fun colorToPositions(color: Int): Pair<Int, Int> {
+        if (colors != null) {
+            // Specific colors mode
+            val idx = colors.indexOf(color)
+            if (idx == -1) return 0 to 0
+            return idx / VALUE_COUNT to idx % VALUE_COUNT
+        } else {
+            // "Rainbow" mode
+            val hsv = floatArrayOf(0f, 0f, 0f)
+            Color.colorToHSV(color, hsv)
+            val position = hsToNearestPosition(hsv)
+            val value = hsv[2]
+            return Pair(
+                position,
+                if (position == 0) ceil(value * (VALUE_COUNT - 1).toFloat()).toInt()
+                else ((value - VALUE_MIN) / (1F - VALUE_MIN) * (VALUE_COUNT - 1)).toInt()
+            )
+        }
+    }
 }
 

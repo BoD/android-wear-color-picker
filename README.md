@@ -26,7 +26,7 @@ repositories {
  (...)
 
 dependencies {
-    compile 'org.jraf:android-wear-color-picker:2.1.0'
+    compile 'org.jraf:android-wear-color-picker:2.2.0'
 }
 ```
 
@@ -36,7 +36,10 @@ dependencies {
 Start the pick color activity:
 
 ```java
-Intent intent = new ColorPickActivity.IntentBuilder().oldColor(oldColor).build(this);
+Intent intent = new ColorPickActivity.IntentBuilder()
+    .oldColor(oldColor)
+    .colors(myListOfColors) // <- optional, specify your own list of colors to be used instead of a "rainbow" preset
+    .build(this);
 startActivityForResult(intent, REQUEST_PICK_COLOR);
 ```
 
