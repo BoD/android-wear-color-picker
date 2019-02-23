@@ -6,7 +6,7 @@ apply plugin: 'kotlin-kapt'
 group = 'org.jraf'
 ext.groupPath = group.replace('.', '/')
 ext.artifactId = 'android-wear-color-picker'
-version = '2.2.0'
+version = '2.2.1'
 
 android {
     compileSdkVersion 28

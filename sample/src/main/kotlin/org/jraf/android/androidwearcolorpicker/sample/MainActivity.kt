@@ -60,6 +60,8 @@ class MainActivity : WearableActivity() {
                 ColorPickActivity.IntentBuilder()
                     .oldColor(pickedColor)
                     .colors(
+//                        createListOfColors()
+
                         listOf(
                             Color.BLACK,
                             Color.DKGRAY,
@@ -79,7 +81,15 @@ class MainActivity : WearableActivity() {
                 REQUEST_PICK_COLOR
             )
         }
+    }
 
+    private fun createListOfColors(): List<Int> {
+        val colorCount = 4 * 12
+        val res = mutableListOf<Int>()
+        for (i in 0 until colorCount) {
+            res += Color.HSVToColor(floatArrayOf((360F / colorCount) * i.toFloat(), 1F, 1F))
+        }
+        return res
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

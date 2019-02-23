@@ -49,9 +49,6 @@ class ColorAdapter(
         const val VALUE_COUNT = 4
         private const val VALUE_MIN = .15F
 
-        const val MID_POSITION =
-            Int.MAX_VALUE / 2 - ((Int.MAX_VALUE / 2) % (HUE_COUNT * SATURATION_COUNT + 1))
-
         /**
          * Turns a wrapped adapter position into a hue-saturation pair.
          *
@@ -182,6 +179,16 @@ class ColorAdapter(
     }
 
     override fun getItemCount() = Int.MAX_VALUE
+
+    fun getMiddlePosition(): Int {
+        val actualNumberOfLines = if (colors != null) {
+            colors.size / VALUE_COUNT
+        } else {
+            // Add one for the "shades of grey" line
+            HUE_COUNT * SATURATION_COUNT + 1
+        }
+        return Int.MAX_VALUE / 2 - ((Int.MAX_VALUE / 2) % actualNumberOfLines)
+    }
 
     /**
      * Computes a [Color]'s closest neighbour within the color picker.

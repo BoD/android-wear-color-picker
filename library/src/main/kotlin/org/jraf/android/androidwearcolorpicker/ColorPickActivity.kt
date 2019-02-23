@@ -123,7 +123,7 @@ class ColorPickActivity : Activity() {
         }
         binding.rclList.adapter = adapter
 
-        val initialPosition = ColorAdapter.MID_POSITION +
+        val initialPosition = adapter.getMiddlePosition() +
                 if (intent?.hasExtra(EXTRA_OLD_COLOR) != true) 0
                 else adapter.colorToPositions(
                     intent!!.getIntExtra(
