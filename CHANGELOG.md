@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.2.2 (2019-09-07)
+- Migration to AndroidX
+
 ## v2.2.1 (2019-02-23)
 - Fixed the landing animation in specific color mode
 

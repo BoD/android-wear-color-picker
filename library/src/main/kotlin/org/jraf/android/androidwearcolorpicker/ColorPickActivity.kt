@@ -28,21 +28,21 @@ import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.ColorInt
-import android.support.v7.widget.LinearSnapHelper
-import android.support.v7.widget.RecyclerView
-import android.support.wear.widget.CurvingLayoutCallback
-import android.support.wear.widget.WearableLinearLayoutManager
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.annotation.ColorInt
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
+import androidx.wear.widget.CurvingLayoutCallback
+import androidx.wear.widget.WearableLinearLayoutManager
 import org.jraf.android.androidwearcolorpicker.databinding.AwcpColorPickBinding
 
 class ColorPickActivity : Activity() {

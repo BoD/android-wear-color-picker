@@ -6,7 +6,7 @@ apply plugin: 'kotlin-kapt'
 group = 'org.jraf'
 ext.groupPath = group.replace('.', '/')
 ext.artifactId = 'android-wear-color-picker'
-version = '2.2.1'
+version = '2.2.2'
 
 android {
     compileSdkVersion 28
@@ -38,7 +38,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Wear
-    implementation 'com.android.support:wear:28.0.0'
+    implementation 'androidx.wear:wear:1.0.0'
 }
 
 // Use "./gradlew uploadArchives" to deploy the aar to your local maven repository

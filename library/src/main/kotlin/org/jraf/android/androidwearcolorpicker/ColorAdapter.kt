@@ -24,13 +24,13 @@
 package org.jraf.android.androidwearcolorpicker
 
 import android.content.Context
-import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
 import org.jraf.android.androidwearcolorpicker.ColorAdapter.Companion.HUE_COUNT
 import org.jraf.android.androidwearcolorpicker.ColorAdapter.Companion.SATURATION_COUNT
 import org.jraf.android.androidwearcolorpicker.databinding.AwcpColorPickItemBinding
