@@ -1,9 +1,9 @@
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20Wear%20Color%20Picker-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/1662)
 
-Android Wear Color Picker
+Wear OS Color Picker
 ===
 
-A color picker activity optimized for Android Wear.  Handy for watch face settings.
+A color picker activity optimized for Wear OS (aka Android Wear).  Handy for watch face settings.
 
 The UI presents a wheel of colors with different hues and lightness.
 
