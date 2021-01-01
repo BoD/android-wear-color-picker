@@ -30,6 +30,15 @@ dependencies {
 }
 ```
 
+The library uses [Android Data Binding](https://developer.android.com/jetpack/androidx/releases/databinding) -
+make sure your `build.gradle` files declare that:
+```groovy
+android {
+    dataBinding {
+        enabled = true
+    }
+}
+```
 
 ### Use the library
 
