@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.2.3 (2021-01-02)
+- Support for rotary input
+- Updated dependencies to latest versions and use gradle.kts
+
 ## v2.2.2 (2019-09-07)
 - Migration to AndroidX
 

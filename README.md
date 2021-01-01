@@ -26,16 +26,16 @@ repositories {
  (...)
 
 dependencies {
-    compile 'org.jraf:android-wear-color-picker:2.2.2'
+    compile 'org.jraf:android-wear-color-picker:2.2.3'
 }
 ```
 
 The library uses [Android Data Binding](https://developer.android.com/jetpack/androidx/releases/databinding) -
-make sure your `build.gradle` files declare that:
+make sure your `build.gradle` declare that:
 ```groovy
 android {
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
 }
 ```
@@ -79,7 +79,7 @@ License
 ---
 
 ```
-Copyright (C) 2015-2019 Benoit 'BoD' Lubek (BoD@JRAF.org)
+Copyright (C) 2015-present Benoit 'BoD' Lubek (BoD@JRAF.org)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
