@@ -19,16 +19,13 @@ The aar artifact is available at the **jcenter** repository. Declare the reposit
 dependency in your `build.gradle` file:
 
 ```groovy
-repositories {
-    jcenter()
-}
-
- (...)
-
 dependencies {
-    compile 'org.jraf:android-wear-color-picker:2.2.3'
+    implementation 'org.jraf:android-wear-color-picker:2.2.4'
 }
 ```
+
+*Note: the artifact is hosted on Maven Central since v2.2.4 - it used to be hosted on JCenter before this version*
+
 
 The library uses [Android Data Binding](https://developer.android.com/jetpack/androidx/releases/databinding) -
 make sure your `build.gradle` declare that:
