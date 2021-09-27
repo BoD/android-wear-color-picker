@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdk = 31
 
     defaultConfig {
         applicationId = "org.jraf.android.androidwearcolorpicker.sample"
-        minSdkVersion(23)
-        targetSdkVersion(30)
+        minSdk = 23
+        targetSdk = 31
         versionCode = 1
         versionName = "1.0.0"
     }

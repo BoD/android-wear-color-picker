@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.2.4 (2021-09-27)
+- Updated dependencies to latest versions
+- Artifacts are now on Maven Central, instead of JCenter
+
 ## v2.2.3 (2021-01-02)
 - Support for rotary input
 - Updated dependencies to latest versions and use gradle.kts

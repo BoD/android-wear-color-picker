@@ -13,11 +13,11 @@ version = "2.2.3"
 description = "android-wear-color-picker"
 
 android {
-    compileSdkVersion(30)
+    compileSdk = 31
 
     defaultConfig {
-        minSdkVersion(23)
-        targetSdkVersion(30)
+        minSdk = 23
+        targetSdk = 31
     }
 
     buildTypes {
