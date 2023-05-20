@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.3.0 (2023-05-19)
+- The library has been rewritten using Compose
+- **BREAKING** The minSdk is now 25
+- Updated dependencies to latest versions
+- **BREAKING** The ability to specify the colors to display has been removed. I am assuming this was not a very useful feature, and it was making the code more complex. If you need this feature, please open an issue and we can discuss it.
+- Use of the ActivityResultContract API to start the activity and get the result
+
 ## v2.2.4 (2021-09-27)
 - Updated dependencies to latest versions
 - Artifacts are now on Maven Central, instead of JCenter

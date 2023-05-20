@@ -1,0 +1,29 @@
+[versions]
+agp = "8.0.1"
+kotlin = "1.8.21"
+dokka = "1.8.10"
+benManes = "0.46.0"
+
+androidx-wear-compose = "1.1.2"
+
+# See https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+androidx-compose-compiler = "1.4.7"
+
+androidx-compose = "1.4.3"
+
+androidx-activity = "1.7.1"
+
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+benManes = { id = "com.github.ben-manes.versions", version.ref = "benManes" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+
+[libraries]
+androidx-wear-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "androidx-wear-compose" }
+androidx-wear-compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "androidx-wear-compose" }
+
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }

@@ -1,45 +1,54 @@
+@file:SuppressLint("UseTomlInstead")
+
+import android.annotation.SuppressLint
+
 plugins {
-    id("com.android.application")
-    kotlin("android")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 android {
-    compileSdk = 31
+    namespace = "org.jraf.android.androidwearcolorpicker.sample"
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "org.jraf.android.androidwearcolorpicker.sample"
-        minSdk = 23
-        targetSdk = 31
+        minSdk = 25
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0.0"
     }
 
     buildFeatures {
-        dataBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
         }
     }
 
-    sourceSets {
-        getByName("main").java.srcDirs("src/main/kotlin")
+    // See https://kotlinlang.org/docs/gradle-configure-project.html#gradle-java-toolchains-support
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
+kotlin {
+    // See https://kotlinlang.org/docs/gradle-configure-project.html#gradle-java-toolchains-support
+    jvmToolchain(8)
+}
+
 dependencies {
-    implementation(kotlin("stdlib", Versions.KOTLIN))
-    implementation("com.google.android.support", "wearable", Versions.GOOGLE_SUPPORT_WEARABLE)
-    implementation("com.google.android.gms", "play-services-wearable", Versions.PLAY_SERVICE_WEARABLE)
-    implementation("androidx.wear", "wear", Versions.ANDROIDX_WEAR)
-    implementation("androidx.constraintlayout", "constraintlayout", Versions.ANDROIDX_CONSTRAINT_LAYOUT)
-    compileOnly("com.google.android.wearable", "wearable", Versions.GOOGLE_WEARABLE)
+    implementation(libs.androidx.wear.compose.foundation)
+    implementation(libs.androidx.wear.compose.material)
+    implementation(libs.androidx.activity.compose)
 
     implementation(project(":library"))
 }

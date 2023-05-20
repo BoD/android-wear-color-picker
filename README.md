@@ -1,79 +1,54 @@
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20Wear%20Color%20Picker-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/1662)
 
-Wear OS Color Picker
-===
+# Wear OS Color Picker
 
-A color picker activity optimized for Wear OS (aka Android Wear).  Handy for watch face settings.
+A color picker activity optimized for Wear OS (formerly known as Android Wear).  Handy for watch face settings.
 
 The UI presents a wheel of colors with different hues and lightness.
 
 ![Demo](https://github.com/BoD/android-wear-color-picker/raw/master/etc/demo_opt.gif "Demo")
 
 
-How to use
----
+## How to use
 
 ### Adding the library to your project
 
-The aar artifact is available at the **jcenter** repository. Declare the repository and the
-dependency in your `build.gradle` file:
+The artifact is available on Maven Central.
 
-```groovy
+```kotlin
 dependencies {
-    implementation 'org.jraf:android-wear-color-picker:2.2.4'
+    implementation("org.jraf:android-wear-color-picker:2.3.0")
 }
 ```
 
-*Note: the artifact is hosted on Maven Central since v2.2.4 - it used to be hosted on JCenter before this version*
-
-
-The library uses [Android Data Binding](https://developer.android.com/jetpack/androidx/releases/databinding) -
-make sure your `build.gradle` declare that:
-```groovy
-android {
-    buildFeatures {
-        dataBinding = true
-    }
-}
-```
+*Note: the artifact was hosted on JCenter in the past, but is now on Maven Central since v2.2.4*
 
 ### Use the library
 
-Start the pick color activity:
+The picker uses the [ActivityResultContract](https://developer.android.com/reference/androidx/activity/result/contract/ActivityResultContract) API to be launched and to return the picked color:
 
-```java
-Intent intent = new ColorPickActivity.IntentBuilder()
-    .oldColor(oldColor)
-    .colors(myListOfColors) // <- optional, specify your own list of colors to be used instead of a "rainbow" preset
-    .build(this);
-startActivityForResult(intent, REQUEST_PICK_COLOR);
-```
-
-Get the picked color:
-
-```java
-@Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    switch (requestCode) {
-        case REQUEST_PICK_COLOR:
-            if (resultCode == RESULT_CANCELED) {
-                // The user pressed 'Cancel'
-                break;
-            }
-
-            int pickedColor = ColorPickActivity.getPickedColor(data);
-            Log.d("pickedColor=" + Integer.toHexString(pickedColor));
-            break;
+```kotlin
+// 1. Setup the pick launcher
+val colorPickLauncher = registerForActivityResult(ColorPickActivity.Contract()) { pickedColorResult ->
+    if (pickedColorResult == null) {
+        // The user closed the picker without picking anything
+    } else {
+        // Get the picked color. The result is an Int in the form 0xAARRGGBB.
+        pickedColor = pickedColorResult.pickedColor
     }
 }
+
+// ...
+
+// 2. Launch the picker. The picked color parameter is optional - if specified, the picker will start already positioned on that color.
+colorPickLauncher.launch(ColorPickActivity.Contract.PickRequest(pickedColor))
 ```
+
+You can also have a look at the [sample](sample/).
 
 That's it!
 
-
-License
----
+## License
 
 ```
 Copyright (C) 2015-present Benoit 'BoD' Lubek (BoD@JRAF.org)

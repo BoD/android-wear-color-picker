@@ -24,87 +24,69 @@
 
 package org.jraf.android.androidwearcolorpicker.sample
 
-import android.app.Activity
-import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.support.wearable.activity.WearableActivity
-import android.view.View
-import android.widget.Button
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material.Button
+import androidx.wear.compose.material.Text
 import org.jraf.android.androidwearcolorpicker.ColorPickActivity
 
-class MainActivity : WearableActivity() {
-
-    private var pickedColor = Color.WHITE
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        setContent {
+            var pickedColor: Int? by remember { mutableStateOf(null) }
+            val colorPickLauncher = rememberLauncherForActivityResult(contract = ColorPickActivity.Contract()) { pickedColorResult ->
+                if (pickedColorResult == null) {
+                    Log.d("MainActivity", "Cancelled")
+                } else {
+                    pickedColor = pickedColorResult.pickedColor
+                }
+            }
 
-        // Enables Always-on
-        setAmbientEnabled()
-
-        // "Rainbow" mode
-        findViewById<Button>(R.id.btnPickColorRainbow).setOnClickListener {
-            startActivityForResult(
-                ColorPickActivity.IntentBuilder()
-                    .oldColor(pickedColor)
-                    .build(this),
-                REQUEST_PICK_COLOR
-            )
-        }
-
-        // Specific colors mode
-        findViewById<Button>(R.id.btnPickColorSpecific).setOnClickListener {
-            startActivityForResult(
-                ColorPickActivity.IntentBuilder()
-                    .oldColor(pickedColor)
-                    .colors(
-//                        createListOfColors()
-
-                        listOf(
-                            Color.BLACK,
-                            Color.DKGRAY,
-                            Color.GRAY,
-                            Color.LTGRAY,
-                            Color.WHITE,
-                            Color.RED,
-                            Color.GREEN,
-                            Color.BLUE,
-                            Color.YELLOW,
-                            Color.CYAN,
-                            Color.MAGENTA,
-                            0xFFBB00DD.toInt()
-                        )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Button(
+                    onClick = {
+                        colorPickLauncher.launch(ColorPickActivity.Contract.PickRequest(pickedColor))
+                    }
+                ) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        text = "Pick a color"
                     )
-                    .build(this),
-                REQUEST_PICK_COLOR
-            )
+                }
+
+                Spacer(modifier = Modifier.size(16.dp))
+
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .background(Color(pickedColor ?: 0))
+                )
+            }
         }
-    }
-
-    private fun createListOfColors(): List<Int> {
-        val colorCount = 4 * 12
-        val res = mutableListOf<Int>()
-        for (i in 0 until colorCount) {
-            res += Color.HSVToColor(floatArrayOf((360F / colorCount) * i.toFloat(), 1F, 1F))
-        }
-        return res
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_PICK_COLOR && resultCode == Activity.RESULT_OK) {
-            pickedColor = ColorPickActivity.getPickedColor(data!!)
-            updatePickedColor()
-        }
-    }
-
-    private fun updatePickedColor() {
-        findViewById<View>(R.id.pickedColor).setBackgroundColor(pickedColor)
-    }
-
-    companion object {
-        private const val REQUEST_PICK_COLOR = 1
     }
 }

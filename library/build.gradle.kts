@@ -1,45 +1,58 @@
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.parcelize)
     id("maven-publish")
-    id("org.jetbrains.dokka") version Versions.DOKKA_PLUGIN
+    alias(libs.plugins.dokka)
     id("signing")
 }
 
 group = "org.jraf"
-version = "2.2.4"
+version = "2.3.0"
 description = "android-wear-color-picker"
 
 android {
-    compileSdk = 31
+    namespace = "org.jraf.android.androidwearcolorpicker"
+    compileSdk = 33
 
     defaultConfig {
-        minSdk = 23
-        targetSdk = 31
+        minSdk = 25
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
         }
     }
 
-    sourceSets {
-        getByName("main").java.srcDirs("src/main/kotlin")
+    // See https://kotlinlang.org/docs/gradle-configure-project.html#gradle-java-toolchains-support
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     buildFeatures {
-        dataBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
 }
 
+kotlin {
+    // See https://kotlinlang.org/docs/gradle-configure-project.html#gradle-java-toolchains-support
+    jvmToolchain(8)
+}
+
 dependencies {
-    implementation(kotlin("stdlib", Versions.KOTLIN))
-    implementation("androidx.wear", "wear", Versions.ANDROIDX_WEAR)
+    implementation(libs.androidx.wear.compose.foundation)
+    implementation(libs.androidx.activity.compose)
 }
 
 afterEvaluate {
     android.libraryVariants.forEach { variant ->
+        @Suppress("DEPRECATION")
         task<Jar>("jar${variant.name.capitalize()}Sources") {
             description = "Generate a sources Jar for ${variant.name}."
             group = "Publishing"
@@ -47,6 +60,7 @@ afterEvaluate {
             from(variant.sourceSets.map { it.javaDirectories })
         }
 
+        @Suppress("DEPRECATION")
         task<Jar>("jar${variant.name.capitalize()}DokkaHtml") {
             description = "Generate a javadoc (Dokka html) Jar for ${variant.name}."
             group = "Publishing"
@@ -72,7 +86,6 @@ afterEvaluate {
             create<MavenPublication>("releaseMavenPublication") {
                 from(components["release"])
                 artifactId = description
-                artifact(tasks["jarReleaseSources"])
                 artifact(tasks["jarReleaseDokkaHtml"])
 
                 pom {
@@ -119,6 +132,9 @@ afterEvaluate {
         // signing.secretKeyRingFile=<absolute path to the gpg private key>
         sign(publishing.publications)
     }
+
+    // Honestly, ¯\_(ツ)_/¯
+    tasks.getByName("generateMetadataFileForReleaseMavenPublicationPublication").dependsOn("jarReleaseSources")
 }
 
 // Run `./gradlew publishToMavenLocal` to publish to the local maven repo
