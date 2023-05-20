@@ -28,9 +28,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -84,8 +82,12 @@ fun ColorPicker(
 
         }
         // We want the first visible item to be the middle one, so add half the number of items per screen
-        val linesPerScreen = constraints.maxHeight / with(LocalDensity.current) { listItemHeight.toPx() }
-        val listState = rememberLazyListState(initialFirstVisibleIndex - linesPerScreen.toInt() / 2)
+        val listItemHeightPx = with(LocalDensity.current) { listItemHeight.toPx() }
+        val linesPerScreen = constraints.maxHeight / listItemHeightPx
+        val listState = rememberLazyListState(
+            initialFirstVisibleItemIndex = initialFirstVisibleIndex - linesPerScreen.toInt() / 2,
+            initialFirstVisibleItemScrollOffset = listItemHeightPx.toInt() / 2
+        )
 
         // True means reveal in, false means reveal out
         var revealIn: Boolean by remember { mutableStateOf(pickedColor == null) }
@@ -109,8 +111,6 @@ fun ColorPicker(
             )
         }
 
-        @OptIn(ExperimentalFoundationApi::class)
-        val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -126,7 +126,6 @@ fun ColorPicker(
                 },
             state = listState,
             horizontalAlignment = Alignment.CenterHorizontally,
-            flingBehavior = flingBehavior
         ) {
             items(Integer.MAX_VALUE) { listItemIndex ->
                 Box(
@@ -159,10 +158,8 @@ fun ColorPicker(
             }
         }
         LaunchedEffect(Unit) {
-            listState.scroll {
-                // Snap to position - see https://stackoverflow.com/a/74880276
-                with(flingBehavior) { performFling(-1F) }
-            }
+            // Add a small delay before the picker is revealed
+            delay(500)
             if (pickedColor != null) revealIn = true
         }
     }
