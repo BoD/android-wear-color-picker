@@ -29,6 +29,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,10 +51,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.rotary.onRotaryScrollEvent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
@@ -111,9 +117,20 @@ fun ColorPicker(
             )
         }
 
+        val coroutineScope = rememberCoroutineScope()
+        val focusRequester = remember { FocusRequester() }
+        @OptIn(ExperimentalComposeUiApi::class)
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
+                .onRotaryScrollEvent {
+                    coroutineScope.launch {
+                        listState.scrollBy(it.verticalScrollPixels)
+                    }
+                    true
+                }
+                .focusRequester(focusRequester)
+                .focusable()
                 .let {
                     if (revealParams == null) {
                         it
@@ -141,7 +158,6 @@ fun ColorPicker(
                         )
 
                 ) {
-                    val coroutineScope = rememberCoroutineScope()
                     ColorPickerListItem(listItemIndex = listItemIndex, onColorPicked = { color, pickedColorCenterOffset ->
                         revealParams = RevealParams(
                             center = pickedColorCenterOffset,
@@ -158,6 +174,9 @@ fun ColorPicker(
             }
         }
         LaunchedEffect(Unit) {
+            // LazyList needs to be focused to receive rotary input events
+            focusRequester.requestFocus()
+
             // Add a small delay before the picker is revealed
             delay(500)
             if (pickedColor != null) revealIn = true
