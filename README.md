@@ -17,7 +17,7 @@ The artifact is available on Maven Central.
 
 ```kotlin
 dependencies {
-    implementation("org.jraf:android-wear-color-picker:2.3.0")
+    implementation("org.jraf:android-wear-color-picker:3.0.0")
 }
 ```
 

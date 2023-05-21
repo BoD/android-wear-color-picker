@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "org.jraf"
-version = "2.3.0"
+version = "3.0.0"
 description = "android-wear-color-picker"
 
 android {

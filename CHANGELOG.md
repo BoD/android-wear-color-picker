@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.3.0 (2023-05-19)
+## v3.0.0 (2023-05-21)
 - The library has been rewritten using Compose
 - **BREAKING** The minSdk is now 25
 - Updated dependencies to latest versions
